@@ -1,3 +1,5 @@
+
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Products.Application.Contracts.Persistence;
@@ -25,7 +27,20 @@ builder.Services
     });
 
 builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+    if (File.Exists(xmlPath))
+    {
+        options.IncludeXmlComments(
+            xmlPath,
+            includeControllerXmlComments: true
+        );
+    }
+});
 
 builder.Services.AddDbContext<ProductDbContext>(options =>
     options.UseNpgsql(
