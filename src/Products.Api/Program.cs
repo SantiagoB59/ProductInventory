@@ -1,4 +1,3 @@
-
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +24,21 @@ builder.Services
             return new BadRequestObjectResult(problemDetails);
         };
     });
+
+// Configuración CORS para Angular
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendPolicy", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:4200",
+                "https://productinventory.sbtechgroup.com"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddOpenApi();
 
@@ -56,6 +70,10 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+app.UseCors("FrontendPolicy");
+
 app.UseAuthorization();
 
 app.MapControllers();
