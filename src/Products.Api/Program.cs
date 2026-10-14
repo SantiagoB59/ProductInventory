@@ -33,7 +33,8 @@ builder.Services.AddCors(options =>
         policy
             .WithOrigins(
                 "http://localhost:4200",
-                "https://productinventory.sbtechgroup.com"
+                "https://productinventory.sbtechgroup.com",
+                "https://productinventory-crud.sbtechgroup.com"
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
